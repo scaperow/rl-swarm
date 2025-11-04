@@ -104,8 +104,8 @@ class SwarmGameManager(BaseGameManager, DefaultGameManagerMixin):
 
         self.batched_signals = 0.0
         self.time_since_submit = time.time()  # seconds
-        self.submit_period = 3.0  # hours
-        self.submitted_this_round = False
+        self.submit_period = 0.0  # hours
+        self.submitted_this_round = True
 
     def _get_total_rewards_by_agent(self):
         rewards_by_agent = defaultdict(int)

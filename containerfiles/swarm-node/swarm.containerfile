@@ -62,4 +62,7 @@ COPY --chown=gensyn . /home/gensyn/rl_swarm
 # Install Python dependencies for code generation experiments
 RUN pip install --no-cache-dir -r /home/gensyn/rl_swarm/code_gen_exp/requirements.txt
 
-CMD [ "bash", "-c", "/home/gensyn/rl_swarm/run_rl_swarm.sh" ]
+# Install Python dependencies for code generation experiments
+RUN pip install --no-cache-dir -r /home/gensyn/rl_swarm/code_gen_exp/requirements.txt
+
+CMD ["/bin/bash", "-c", "sleep 2 && echo -e '\n\nN' | /home/gensyn/rl_swarm/run_rl_swarm.sh"]
