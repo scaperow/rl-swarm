@@ -33,11 +33,13 @@ RUN apt update -y && \
 WORKDIR /home/gensyn
 USER gensyn
 
-RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash
-ENV NVM_DIR=/home/gensyn/.nvm NODE_VERSION=22.16.0
-RUN . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION} && \
-    . "$NVM_DIR/nvm.sh" && nvm use v${NODE_VERSION} && \
-    . "$NVM_DIR/nvm.sh" && nvm alias default v${NODE_VERSION} && \
+ENV HOME=/home/gensyn
+ENV NVM_DIR=/home/gensyn/.nvm
+ENV NODE_VERSION=22.16.0
+RUN curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.40.3/install.sh | bash && \
+    . "$NVM_DIR/nvm.sh" && nvm install ${NODE_VERSION} && \
+    nvm use v${NODE_VERSION} && \
+    nvm alias default v${NODE_VERSION} && \
     npm install -g --silent yarn
 
 COPY ./containerfiles/swarm-node/versions.json ./versions.json
@@ -58,9 +60,6 @@ ENV DOCKER=t
 ENV IDENTITY_PATH=/home/gensyn/rl_swarm/keys/swarm.pem
 
 COPY --chown=gensyn . /home/gensyn/rl_swarm
-
-# Install Python dependencies for code generation experiments
-RUN pip install --no-cache-dir -r /home/gensyn/rl_swarm/code_gen_exp/requirements.txt
 
 # Install Python dependencies for code generation experiments
 RUN pip install --no-cache-dir -r /home/gensyn/rl_swarm/code_gen_exp/requirements.txt

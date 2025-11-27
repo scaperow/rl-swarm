@@ -5,6 +5,9 @@ set -euo pipefail
 # General arguments
 ROOT=$PWD
 
+# Model name for training (optional, can be set by user)
+MODEL_NAME=${MODEL_NAME:-""}
+
 export IDENTITY_PATH
 export GENSYN_RESET_CONFIG
 export CONNECT_TO_TESTNET=true
@@ -19,7 +22,6 @@ DEFAULT_IDENTITY_PATH="$ROOT"/swarm.pem
 IDENTITY_PATH=${IDENTITY_PATH:-$DEFAULT_IDENTITY_PATH}
 
 DOCKER=${DOCKER:-""}
-GENSYN_RESET_CONFIG=${GENSYN_RESET_CONFIG:-""}
 
 # Bit of a workaround for the non-root docker container.
 if [ -n "$DOCKER" ]; then
@@ -38,8 +40,8 @@ fi
 # Will ignore any visible GPUs if set.
 CPU_ONLY=${CPU_ONLY:-""}
 
-# Set if successfully parsed from modal-login/temp-data/userData.json.
-ORG_ID=${ORG_ID:-""}
+# Model name for training (optional, can be set by user)
+MODEL_NAME=${MODEL_NAME:-""}
 
 GREEN_TEXT="\033[32m"
 BLUE_TEXT="\033[34m"
@@ -238,20 +240,20 @@ fi
 echo_green ">> Done!"
 
 
-echo -en $GREEN_TEXT
-read -p ">> Would you like to push models you train in the RL swarm to the Hugging Face Hub? [y/N] " yn
-echo -en $RESET_TEXT
-yn=${yn:-N} # Default to "N" if the user presses Enter
-case $yn in
-    [Yy]*) read -p "Enter your Hugging Face access token: " HUGGINGFACE_ACCESS_TOKEN ;;
-    [Nn]*) HUGGINGFACE_ACCESS_TOKEN="None" ;;
-    *) echo ">>> No answer was given, so NO models will be pushed to Hugging Face Hub" && HUGGINGFACE_ACCESS_TOKEN="None" ;;
-esac
+# echo -en $GREEN_TEXT
+# read -p ">> Would you like to push models you train in the RL swarm to the Hugging Face Hub? [y/N] " yn
+# echo -en $RESET_TEXT
+# yn=${yn:-N} # Default to "N" if the user presses Enter
+# case $yn in
+#     [Yy]*) read -p "Enter your Hugging Face access token: " HUGGINGFACE_ACCESS_TOKEN ;;
+#     [Nn]*) HUGGINGFACE_ACCESS_TOKEN="None" ;;
+#     *) echo ">>> No answer was given, so NO models will be pushed to Hugging Face Hub" && HUGGINGFACE_ACCESS_TOKEN="None" ;;
+# esac
 
 
-echo -en $GREEN_TEXT
-read -p ">> Enter the name of the model you want to use in huggingface repo/name format, or press [Enter] to use the default model. " MODEL_NAME
-echo -en $RESET_TEXT
+# echo -en $GREEN_TEXT
+# read -p ">> Enter the name of the model you want to use in huggingface repo/name format, or press [Enter] to use the default model. " MODEL_NAME
+# echo -en $RESET_TEXT
 
 # Only export MODEL_NAME if user provided a non-empty value
 if [ -n "$MODEL_NAME" ]; then
